@@ -1,4 +1,5 @@
 # https://github.com/kershner/screenBloom/blob/master/app/modules/img_proc.py
+import cProfile
 
 LOW_THRESHOLD = 10
 MID_THRESHOLD = 40
@@ -6,6 +7,7 @@ HIGH_THRESHOLD = 240
 
 
 def img_avg(img):
+    
     dark_pixels = 1
     mid_range_pixels = 1
     total_pixels = 1
@@ -13,14 +15,11 @@ def img_avg(img):
     g = 1
     b = 1
 
-    # Win version of imgGrab does not contain alpha channel
-    if img.mode == 'RGB':
-        img.putalpha(0)
-
     # Create list of pixels
     pixels = list(img.getdata())
 
-    for red, green, blue, alpha in pixels:
+
+    for red, green, blue in pixels:
         # Don't count pixels that are too dark
         if red < LOW_THRESHOLD and green < LOW_THRESHOLD and blue < LOW_THRESHOLD:
             dark_pixels += 1
@@ -54,3 +53,5 @@ def img_avg(img):
         'dark_ratio': float(dark_pixels) / float(total_pixels) * 100
     }
     return data
+
+    
